@@ -3,7 +3,7 @@ evaluator
 
 Python script for evaluating classification tasks against ground truth.
 
-`
+```
 ./evaluator.py -h
 usage: evaluator.py [-h] -p PREDICTION_FILE -g GROUND_TRUTH_FILE
                     [-b BINARY_PREDICTION_FILE] [--icd]
@@ -19,4 +19,4 @@ optional arguments:
   -b BINARY_PREDICTION_FILE, --binary_prediction_file BINARY_PREDICTION_FILE
                         Ground truth file.
   --icd
-  `
+```
