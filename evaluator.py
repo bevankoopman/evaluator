@@ -82,7 +82,7 @@ if __name__ == '__main__':
 	argparser = argparse.ArgumentParser(description="Evaluate the predictions against ground truth.")
 	argparser.add_argument("-p", "--prediction_file", required=True, help="Predictions file.")
 	argparser.add_argument("-g", "--ground_truth_file", required=True, help="Ground truth file.")
-	argparser.add_argument("-b", "--binary_prediction_file", required=False, help="Ground truth file.")
+	argparser.add_argument("-b", "--binary_prediction_file", required=False, help="Binary prediction to filter the prediction_file on.")
 	argparser.add_argument('--icd', action='store_true', default=False, help="Whether the evaluation is using ICD code; in which case consider only first three characters (CXX). Default is False")
 
 	prediction_file = argparser.parse_args().prediction_file
