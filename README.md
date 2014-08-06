@@ -67,25 +67,25 @@ A `*` character will be marked against the classification if that classification
 docId   Actual  Predictions (1..n) *=correct
 380770  other   other*
 210836  other   other*
-279222  Influenza   other
+279222  Flu	other
 323953  other   other*
 305748  other   other*
-82922   Influenza   Influenza*
+82922   Flu	Flu*
 346547  other   other*
-1475    other   Influenza
+1475    other   Flu
 ```
 
-After the individual predictions a summary is provided for each class. For example, a sample output for Influenza is provided below:
+After the individual predictions a summary is provided for each class. For example, a sample output for Flu is provided below:
 
 ```
-Influenza results:
+Flu results:
 				Classifier
 				-	+
 	Ground	-	0	7
 	Truth	+	2	36
 
 
-	Influenza Recall: 0.9474
-	Influenza Precsion: 0.8372
-	Influenza Fmeasure: 0.8889
+	Flu Recall: 0.9474
+	Flu Precsion: 0.8372
+	Flu Fmeasure: 0.8889
 ```
