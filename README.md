@@ -3,6 +3,8 @@ evaluator
 
 Python script for evaluating classification tasks against ground truth.
 
+## Usage
+
 ```
 ./evaluator.py -h
 usage: evaluator.py [-h] -p PREDICTION_FILE -g GROUND_TRUTH_FILE
@@ -22,6 +24,8 @@ optional arguments:
                         case consider only first three characters (CXX).
                         Default is False
 ```
+
+## Inputs
 
 The format of the predictions file is:
 
@@ -48,3 +52,40 @@ docId[tab]classification
 where classification = 0 or 1
 
 The --icd flag is used when processing ICD codes where you only care about the first three characters, e.g., CXX. The default is false (i.e., not ICD).
+
+## Outputs
+
+The program will print the individual predictions for each docId in the following format:
+
+```
+docId[tab]GroundTruthValue[tab]classification1[tab]...[tab]classificationN
+```
+
+A `*` character will be marked against the classification if that classification matches the groundtruth. A sample output is provided below:
+
+```
+docId   Actual  Predictions (1..n) *=correct
+380770  other   other*
+210836  other   other*
+279222  Influenza   other
+323953  other   other*
+305748  other   other*
+82922   Influenza   Influenza*
+346547  other   other*
+1475    other   Influenza
+```
+
+After the individual predictions a summary is provided for each class. For example, a sample output for Influenza is provided below:
+
+```
+Influenza results:
+				Classifier
+				-	+
+	Ground	-	0	7
+	Truth	+	2	36
+
+
+	Influenza Recall: 0.9474
+	Influenza Precsion: 0.8372
+	Influenza Fmeasure: 0.8889
+```

@@ -55,7 +55,7 @@ class ConfusionMatrix():
 
 	def __str__(self):
 		tostring = ""
-		tostring = tostring + "%s results" % self.classification
+		tostring = tostring + "%s results:\n" % self.classification
 		tostring = tostring + "\t\t\tClassifier\n"
 		tostring = tostring + "\t\t\t-\t+\n"
 		tostring = tostring + "\tGround\t-\t%d\t%d\n" % (self.true_negative, self.false_positive)
@@ -64,9 +64,9 @@ class ConfusionMatrix():
 		return tostring
 
 	def summary_measures(self):
-		print "%s Recall: %.4f" % (self.classification, self.recall())
-		print "%s Precsion: %.4f" % (self.classification, self.precision())
-		print "%s Fmeasure: %.4f" % (self.classification, self.fmeasure())
+		print "\t%s Recall: %.4f" % (self.classification, self.recall())
+		print "\t%s Precsion: %.4f" % (self.classification, self.precision())
+		print "\t%s Fmeasure: %.4f" % (self.classification, self.fmeasure())
 
 def get_binary_predictions(binary_prediction_file):
 	binary = {}
@@ -82,7 +82,7 @@ if __name__ == '__main__':
 	argparser = argparse.ArgumentParser(description="Evaluate the predictions against ground truth.")
 	argparser.add_argument("-p", "--prediction_file", required=True, help="Predictions file.")
 	argparser.add_argument("-g", "--ground_truth_file", required=True, help="Ground truth file.")
-	argparser.add_argument("-b", "--binary_prediction_file", required=False, help="Binary prediction to filter the prediction_file on.")
+	argparser.add_argument("-b", "--binary_prediction_file", required=False, help="Binary prediction to filter the prediction_file.")
 	argparser.add_argument('--icd', action='store_true', default=False, help="Whether the evaluation is using ICD code; in which case consider only first three characters (CXX). Default is False")
 
 	prediction_file = argparser.parse_args().prediction_file
@@ -97,6 +97,7 @@ if __name__ == '__main__':
 	
 	confusion_matices = {}
 
+	print "docId\tActual\tPredictions (1..n) *=correct"
 	with open(prediction_file) as fh:
 		for line in fh:
 			items = line.split()
@@ -119,7 +120,9 @@ if __name__ == '__main__':
 					break
 			confusion_matices[gt[docId]] = conf_mat
 
-			print docId, gt[docId], [p+('*' if p == gt[docId] else "") for p in predictions]
+			labeled_predictions = [p+('*' if p == gt[docId] else "") for p in predictions]
+
+			print "%s\t%s\t%s" % (docId, gt[docId], reduce(lambda x,y: x+"\t"+y, labeled_predictions))
 
 			if not correct:
 				for prediction in predictions:
@@ -128,6 +131,7 @@ if __name__ == '__main__':
 					other_conf_matrix.increment_false_positive()
 					confusion_matices[prediction] = other_conf_matrix
 	
+	print "\n== SUMMARY ==\n"
 	for conf_mat in confusion_matices.values():
 		print conf_mat
 		conf_mat.summary_measures()
