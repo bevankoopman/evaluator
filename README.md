@@ -67,10 +67,10 @@ A `*` character will be marked against the classification if that classification
 docId   Actual  Predictions (1..n) *=correct
 380770  other   other*
 210836  other   other*
-279222  Flu	other
+279222  Flu     other
 323953  other   other*
 305748  other   other*
-82922   Flu	Flu*
+82922   Flu     Flu*
 346547  other   other*
 1475    other   Flu
 ```
