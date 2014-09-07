@@ -190,8 +190,8 @@ if __name__ == '__main__':
 			print " & & & & %d & %d & + & %s \\\\" % (conf_mat.false_negative, conf_mat.true_positive, conf_mat.classification)
 		print '''\\bottomrule
  \\end{tabular}
- \\caption{Classification performation results for Influenza, Diabetes and Pneumonia.}
- \\label{tbl:disease_results}
+ \\caption{Classification evaluation.}
+ \\label{tbl:results}
 \\end{table}
 '''
 
