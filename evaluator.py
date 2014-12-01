@@ -77,7 +77,7 @@ def get_binary_predictions(binary_prediction_file, weka=False):
 				items = line.split()
 				if len(items) == 4:
 					docid, coding = items[0:2]
-					binary[docid.replace(".json", "")] = coding if coding == "cancer" else "0"
+					binary[docid.replace(".json", "")] = "0" if coding == "nocancer" or coding == "other" else coding
 			if line.startswith("==Predictions=="):
 				start_prediction = True
 	else:
@@ -132,7 +132,7 @@ if __name__ == '__main__':
 	binary = {}
 	if binary_prediction_file:
 		binary = get_binary_predictions(binary_prediction_file, binary_weka)
-	
+
 	confusion_matices = {}
 
 	print "docId\tActual\tPredictions (1..n) *=correct"
@@ -140,15 +140,19 @@ if __name__ == '__main__':
 	for docId, predictions in read_predictions(prediction_file, icd, weka):
 		pred_count = pred_count + 1
 
+		binary_comment = ""
 		if len(binary) > 0 and binary[docId] == "0":
-			continue
+			for p in predictions:
+				if p != "other" and p != "nocancer":
+					binary_comment = binary_comment + " " + p +"->other"
+			predictions = ["other"]
 
 		conf_mat = confusion_matices.get(gt[docId], ConfusionMatrix(gt[docId]))
 
 		correct = False
 		for prediction in predictions:
 			if icd:
-				prediction = prediction[0:3]	
+				prediction = prediction[0:3]
 			if prediction == gt[docId]:
 				correct = True
 				conf_mat.increment_true_positive()
@@ -157,7 +161,7 @@ if __name__ == '__main__':
 
 		labeled_predictions = [p+('*' if p == gt[docId] else "") for p in predictions]
 
-		print "%s\t%s\t%s" % (docId, gt[docId], reduce(lambda x,y: x+"\t"+y, labeled_predictions))
+		print "%s\t%s\t%s\t%s" % (docId, gt[docId], reduce(lambda x,y: x+"\t"+y, labeled_predictions), binary_comment)
 
 		if not correct:
 			for prediction in predictions:
@@ -172,7 +176,7 @@ if __name__ == '__main__':
 		print conf_mat
 		conf_mat.summary_measures()
 		print ""
-		print conf_mat.classification, conf_mat.precision(), conf_mat.recall(), conf_mat.fmeasure(), conf_mat.true_positive, conf_mat.false_positive
+		#print conf_mat.classification, conf_mat.precision(), conf_mat.recall(), conf_mat.fmeasure(), conf_mat.true_positive, conf_mat.false_positive
 
 	if latex:
 		print '''
