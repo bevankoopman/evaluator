@@ -6,9 +6,8 @@ Python script for evaluating classification tasks against ground truth.
 ## Usage
 
 ```
-./evaluator.py -h
 usage: evaluator.py [-h] -p PREDICTION_FILE -g GROUND_TRUTH_FILE
-                    [-b BINARY_PREDICTION_FILE] [--icd]
+                    [-b BINARY_PREDICTION_FILE] [-bw] [--icd] [-t] [-w]
 
 Evaluate the predictions against ground truth.
 
@@ -19,10 +18,13 @@ optional arguments:
   -g GROUND_TRUTH_FILE, --ground_truth_file GROUND_TRUTH_FILE
                         Ground truth file.
   -b BINARY_PREDICTION_FILE, --binary_prediction_file BINARY_PREDICTION_FILE
-                        Binary prediction to filter the prediction_file on.
+                        Binary prediction to filter the prediction_file.
+  -bw, --binary_weka    Binary prediction is in Weka format.
   --icd                 Whether the evaluation is using ICD code; in which
                         case consider only first three characters (CXX).
                         Default is False
+  -t, --tex             Print results in LaTeX table format.
+  -w, --weka            Predictions are in weka format
 ```
 
 ## Inputs
