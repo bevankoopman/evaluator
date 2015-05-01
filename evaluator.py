@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import argparse
+from math import sqrt
 
 def read_ground_truth(ground_truth_file, icd):
 	gt = {}
@@ -42,6 +43,7 @@ class ConfusionMatrix():
 			return 0.0000
 
 	def precision(self):
+
 		try:
 			return self.true_positive / float(self.true_positive + self.false_positive)
 		except:
@@ -53,6 +55,15 @@ class ConfusionMatrix():
 		except:
 			return 0.0000
 
+	def ci_precision(self):
+		return self.conf_int(self.precision(), (self.true_positive+self.false_positive))
+
+	def ci_recall(self):
+		return self.conf_int(self.recall(), (self.true_positive+self.false_negative))
+
+	def ci_fmeasure(self):
+		return self.conf_int(self.fmeasure(), (self.true_positive+self.false_negative+self.false_positive))
+
 	def __str__(self):
 		tostring = ""
 		tostring = tostring + "%s results:\n" % self.classification
@@ -63,10 +74,14 @@ class ConfusionMatrix():
 		tostring = tostring + "\n"
 		return tostring
 
-	def summary_measures(self):
-		print "\t%s Recall: %.4f" % (self.classification, self.recall())
-		print "\t%s Precsion: %.4f" % (self.classification, self.precision())
-		print "\t%s Fmeasure: %.4f" % (self.classification, self.fmeasure())
+	def conf_int(self, p, n, z=1.96):
+		return z * sqrt( (1/float(n)) * p * (1-p) )
+
+	def summary_measures(self):		
+
+		print "\t%s Precsion:\t%.4f\t95C.I.: %.4f-%.4f" % (self.classification, self.precision(), self.precision()-self.ci_precision(), self.precision()+self.ci_precision())
+		print "\t%s Recall:\t%.4f\t95C.I.: %.4f-%.4f" % (self.classification, self.recall(), self.recall()-self.ci_recall(), self.recall()+self.ci_recall())
+		print "\t%s Fmeasure:\t%.4f\t95C.I.: %.4f-%.4f" % (self.classification, self.fmeasure(), self.fmeasure()-self.ci_fmeasure(), self.fmeasure()+self.ci_fmeasure())
 
 def get_binary_predictions(binary_prediction_file, weka=False):
 	binary = {}
